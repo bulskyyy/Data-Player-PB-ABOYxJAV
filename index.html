@@ -1,0 +1,72 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulir Pendaftaran Player Point Blank</title>
+    <style>
+        /* ... Style CSS sama seperti sebelumnya ... */
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1>Formulir Pendaftaran Player Point Blank</h1>
+            <p>Silahkan isi data diri Anda dengan lengkap</p>
+        </div>
+        
+        <!-- Ubah bagian form untuk menambahkan script submission -->
+        <form id="playerForm" onsubmit="handleFormSubmit(this)">
+            <div class="form-group">
+                <label>Nickname PB <span class="required">*</span></label>
+                <input type="text" name="nickname" required placeholder="Masukkan nickname PB Anda">
+            </div>
+
+            <div class="form-group">
+                <label>Nama Lengkap <span class="required">*</span></label>
+                <input type="text" name="nama" required placeholder="Masukkan nama lengkap Anda">
+            </div>
+
+            <div class="form-group">
+                <label>Umur <span class="required">*</span></label>
+                <input type="number" name="umur" required min="12" max="99" placeholder="Masukkan umur Anda">
+            </div>
+
+            <div class="form-group">
+                <label>Regional/Kota <span class="required">*</span></label>
+                <input type="text" name="regional" required placeholder="Masukkan kota Anda">
+            </div>
+
+            <div class="form-group">
+                <label>Nomor HP <span class="required">*</span></label>
+                <input type="tel" name="hp" required placeholder="Contoh: 081234567890" pattern="[0-9]{10,13}">
+            </div>
+
+            <button type="submit" class="submit-btn">Kirim</button>
+        </form>
+    </div>
+
+    <script>
+        function handleFormSubmit(formObject) {
+            event.preventDefault(); // Mencegah form refresh
+            
+            // URL dari web app yang di-deploy (akan didapatkan setelah deploy script)
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxrclafYR8ltQzjZajGabHf6ajHdLY7u04L8uzcYplX2Y_2XEGCUm0h3DKGbBjdIKat/exec'
+            
+            // Mengambil data form
+            const form = formObject;
+            const formData = new FormData(form);
+            
+            // Mengirim data ke Google Sheet
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => {
+                    alert('Data berhasil tersimpan!');
+                    form.reset(); // Reset form setelah berhasil
+                })
+                .catch(error => {
+                    alert('Error! Data gagal tersimpan');
+                    console.error('Error!', error.message);
+                });
+        }
+    </script>
+</body>
+</html>
