@@ -1,10 +1,9 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>Formulir Pendaftaran Player Point Blank</title>
     <style>
-        /* ... Style CSS sama seperti sebelumnya ... */
+        /* Tambahkan style CSS jika diperlukan */
     </style>
 </head>
 <body>
@@ -14,8 +13,7 @@
             <p>Silahkan isi data diri Anda dengan lengkap</p>
         </div>
         
-        <!-- Ubah bagian form untuk menambahkan script submission -->
-        <form id="playerForm" onsubmit="handleFormSubmit(this)">
+        <form id="playerForm">
             <div class="form-group">
                 <label>Nickname PB <span class="required">*</span></label>
                 <input type="text" name="nickname" required placeholder="Masukkan nickname PB Anda">
@@ -46,27 +44,30 @@
     </div>
 
     <script>
-        function handleFormSubmit(formObject) {
-            event.preventDefault(); // Mencegah form refresh
-            
-            // URL dari web app yang di-deploy (akan didapatkan setelah deploy script)
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbxrclafYR8ltQzjZajGabHf6ajHdLY7u04L8uzcYplX2Y_2XEGCUm0h3DKGbBjdIKat/exec'
-            
-            // Mengambil data form
-            const form = formObject;
-            const formData = new FormData(form);
-            
-            // Mengirim data ke Google Sheet
-            fetch(scriptURL, { method: 'POST', body: formData })
-                .then(response => {
-                    alert('Data berhasil tersimpan!');
-                    form.reset(); // Reset form setelah berhasil
-                })
-                .catch(error => {
-                    alert('Error! Data gagal tersimpan');
-                    console.error('Error!', error.message);
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwvoaoXIXS_NrxM5lm3QHA76ynQ3CDlRptJnDTxNPbtXKVHfzWEB7bW0PyXDqHjWE-z/exec';
+        const form = document.getElementById('playerForm');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Mencegah reload halaman
+
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: new FormData(form)
                 });
-        }
+
+                if (response.ok) {
+                    alert('Data berhasil tersimpan!');
+                    form.reset();
+                } else {
+                    throw new Error('Terjadi kesalahan saat menyimpan data.');
+                }
+            } catch (error) {
+                console.error('Error!', error.message);
+                alert('Error! Data gagal tersimpan.');
+            }
+        });
     </script>
 </body>
 </html>
+
